@@ -1,4 +1,4 @@
 python-templates
 ================
 
-Python Templates
+Python templates.
