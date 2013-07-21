@@ -25,7 +25,7 @@ class Any(object):
 
     ###############################################################################
     def __init__(self, arg1):
-        info('Any: instance created')
+        notify('Any: instance created')
 
     ###############################################################################
     def method1(self, arg1):
@@ -40,7 +40,7 @@ class Any(object):
 # |_| |_| |_|\__,_|_|_| |_|                                                   #
 #                                                                             #
 ###############################################################################
-def parse_args():
+def parse_args(args):
     from optparse import OptionParser
 
     usage = './%prog [options] agr1 agr2 ...'
@@ -64,21 +64,27 @@ def parse_args():
         else:
             parser.add_option(option[0], option[1], dest = dest, action = action, default = default, help = help)
 
-    opt_arg = parser.parse_args()
+    opt_arg = parser.parse_args(args)
     return (opt_arg[0], opt_arg[1], program_name)
 
-def info(msg, p=True, l=True):
+
+def notify(msg, level='INFO', p=True, l=True):
+    level = level.upper()
     if p:
-        print 'INFO: %s' % msg
+        print '%s: %s' % (level, msg)
     if l:
-        logging.info(msg)
+        if level == 'ERROR':
+            logging.error(msg)
+        elif level == 'WARN':
+            logging.warn(msg)
+        else:
+            logging.info(msg)
 
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
 
-def main():
-    # =========================================================================
-    # Parse command-line arguments
-    # =========================================================================
-    (opts, args, program_name) = parse_args()
+    (opts, args, program_name) = parse_args(argv[1:])
 
     if opts.log_level == '':
         opts.log_level = 'INFO'
@@ -93,6 +99,10 @@ def main():
         level=numeric_level)
 
     instance = Any('xxx')
+    arg_count = 0
+    for arg in args:
+        notify('arg[%d]=%r' % (arg_count, arg))
+        arg_count += 1
 
 if __name__ == "__main__":      # pragma: no cover
     sys.exit(main())
