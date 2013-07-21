@@ -84,7 +84,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    (opts, args, program_name) = parse_args(argv[1:])
+    (opts, args, program_name) = parse_args(argv)
 
     if opts.log_level == '':
         opts.log_level = 'INFO'
