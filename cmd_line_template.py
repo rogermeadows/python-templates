@@ -82,7 +82,7 @@ def notify(msg, level='INFO', p=True, l=True):
 
 def main(argv=None):
     if argv is None:
-        argv = sys.argv
+        argv = sys.argv[1:]
 
     (opts, args, program_name) = parse_args(argv)
 
