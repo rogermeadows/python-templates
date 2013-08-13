@@ -24,8 +24,9 @@ import logging
 class Any(object):
 
     ###############################################################################
-    def __init__(self, arg1):
+    def __init__(self, arg1, logger=None):
         notify('Any: instance created')
+        self.logger = logger
 
     ###############################################################################
     def method1(self, arg1):
@@ -93,12 +94,20 @@ def main(argv=None):
         print 'ERROR: Invalid log level %s' % opts.log_level
 
     # set up logging
+    '''
     logging.basicConfig(filename='/tmp/%s.log' % program_name,
         format='%(asctime)s %(levelname)s %(message)s',
         filemode='a',
         level=numeric_level)
+    '''
+    logger = logging.getLogger('xxx.py')
+    fh = logging.FileHandler('/tmp/xxx.log')
+    fm = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    fh.setFormatter(fm)
+    logger.setLevel(numeric_level)
+    logger.addHandler(fh)
 
-    instance = Any('xxx')
+    instance = Any('yyy', logger)
     arg_count = 0
     for arg in args:
         notify('arg[%d]=%r' % (arg_count, arg))
