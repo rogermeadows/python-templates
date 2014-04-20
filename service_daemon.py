@@ -1,7 +1,7 @@
-mport sys, os, time, atexit
+import sys, os, time, atexit
 from signal import SIGTERM
 
-class Daemon:
+class ServiceDaemon(object):
         """
         A generic daemon class.
 
