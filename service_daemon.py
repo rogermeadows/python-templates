@@ -5,6 +5,7 @@ import time
 
 from signal import SIGTERM
 
+
 class ServiceDaemon(object):
         """
         A generic daemon class.
@@ -84,7 +85,7 @@ class ServiceDaemon(object):
                 sys.exit(1)
 
             # Start the daemon
-            print '{}: starting.'.format(self.name)                
+            print '{}: starting.'.format(self.name)
             self.daemonize()
             self.run()
 
@@ -103,9 +104,9 @@ class ServiceDaemon(object):
             if not pid:
                 message = "pidfile %s does not exist. ServiceDaemon not running?\n"
                 sys.stderr.write(message % self.pidfile)
-                return # not an error in a restart
+                return  # not an error in a restart
 
-            # Try killing the daemon process       
+            # Try killing the daemon process
             try:
                 while 1:
                         os.kill(pid, SIGTERM)
@@ -118,7 +119,7 @@ class ServiceDaemon(object):
                 else:
                     print str(err)
                     sys.exit(1)
-            print '{}: stopped.'.format(self.name)                
+            print '{}: stopped.'.format(self.name)
 
         def restart(self):
             """
@@ -129,6 +130,6 @@ class ServiceDaemon(object):
 
         def run(self):
             """
-            You should override this method when you subclass ServiceDaemon. It will be called after the process has been
-            daemonized by start() or restart().
+            You should override this method when you subclass ServiceDaemon. It will be called after the
+            process has been daemonized by start() or restart().
             """
