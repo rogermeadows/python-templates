@@ -7,6 +7,10 @@ from signal import SIGTERM
 
 from bottle import route, run
 
+
+HOST = '0.0.0.0'
+PORT = 4001
+
 class ServiceDaemon(object):
         """
         A generic daemon class.
@@ -129,6 +133,16 @@ class ServiceDaemon(object):
             self.stop()
             self.start()
 
+        def status(self):
+            try:
+                pf = open(self.pidfile, 'r')
+            except IOError:
+                print '{}: is NOT running'.format(self.name)
+                return False
+            pf.close()
+            print '{}: is running'.format(self.name)
+            return True
+        
         def run(self):
             """
             You should override this method when you subclass ServiceDaemon. It will be called after the process has been
@@ -167,6 +181,8 @@ def main(argv=None):
         argv = sys.argv[1:]
     parser = argparse.ArgumentParser()
     parser.add_argument('cmd', help='command (start/stop/restart)')
+    parser.add_argument('-i', '--host', help='the host to listen on', action='store', default=HOST)
+    parser.add_argument('-p', '--port', help='the port to listen on', action='store', default=PORT)
     parser.add_argument('-v', '--verbose', help='print more information', action='store_true')
     parser.add_argument('-l', '--loglevel', help='set logging level', action='store')
     opts = parser.parse_args(argv)
@@ -198,6 +214,11 @@ def main(argv=None):
         apid.stop()
     elif opts.cmd == 'restart':
         apid.restart()
+    elif opts.cmd == 'status':
+        apid.status()
+    elif opts.cmd == 'fg':
+        print 'starting in the foreground'
+        run(host=opts.host, port=opts.port, debug=True)
     else:
         print '\nERROR: invalid command: {}\n'.format(opts.cmd)
 

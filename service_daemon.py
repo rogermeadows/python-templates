@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import sys
 import atexit
@@ -127,6 +128,18 @@ class ServiceDaemon(object):
             """
             self.stop()
             self.start()
+
+        def running(self):
+            """
+            Return True if the daemon is running, otherwise return False
+            """
+            try:
+                pf = open(self.pidfile, 'r')
+            except IOError:
+                return False
+            pf.close()
+            return True
+        
 
         def run(self):
             """
