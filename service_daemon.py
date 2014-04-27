@@ -131,7 +131,7 @@ class ServiceDaemon(object):
 
         def running(self):
             """
-            Return True if the daemon is running, otherwise return False
+            Return True if running, False otherwise
             """
             try:
                 pf = open(self.pidfile, 'r')
@@ -140,7 +140,16 @@ class ServiceDaemon(object):
             pf.close()
             return True
         
-
+        def status(self):
+            """
+            Report on whether the daemon is running or not
+            """
+            if self.running():
+                print '{}: is running'.format(self.name)
+                return True
+            print '{}: is NOT running'.format(self.name)
+            return False
+        
         def run(self):
             """
             You should override this method when you subclass ServiceDaemon. It will be called after the

@@ -133,13 +133,18 @@ class ServiceDaemon(object):
             self.stop()
             self.start()
 
-        def status(self):
+        def running(self):
             try:
                 pf = open(self.pidfile, 'r')
             except IOError:
-                print '{}: is NOT running'.format(self.name)
                 return False
             pf.close()
+            return True
+        
+        def status(self):
+            if not self.running():
+                print '{}: is NOT running'.format(self.name)
+                return False
             print '{}: is running'.format(self.name)
             return True
         
