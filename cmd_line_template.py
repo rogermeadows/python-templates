@@ -1,46 +1,15 @@
 #!/usr/bin/env python
 '''
-#
-# Module: xxx.py
+# File: xxx.py
 # Descr : This module provides ... 
-#
-# Copyright(c) 2013, Cyan, Inc. All rights reserved.
 #
 '''
 
 import os
 import sys
 import logging
+from sys_logger import get_sys_logger
 
-###############################################################################
-#       _                     _       __ _       _ _   _                      #
-#   ___| | __ _ ___ ___    __| | ___ / _(_)_ __ (_) |_(_) ___  _ __  ___      #
-#  / __| |/ _` / __/ __|  / _` |/ _ \ |_| | '_ \| | __| |/ _ \| '_ \/ __|     #
-# | (__| | (_| \__ \__ \ | (_| |  __/  _| | | | | | |_| | (_) | | | \__ \     #
-#  \___|_|\__,_|___/___/  \__,_|\___|_| |_|_| |_|_|\__|_|\___/|_| |_|___/     #
-#                                                                             #
-###############################################################################
-
-class Any(object):
-
-    ###############################################################################
-    def __init__(self, arg1, logger=None):
-        notify('Any: instance created')
-        self.logger = logger
-
-    ###############################################################################
-    def method1(self, arg1):
-        pass
-
-
-###############################################################################
-#                  _                                                          #
-#  _ __ ___   __ _(_)_ __                                                     #
-# | '_ ` _ \ / _` | | '_  \                                                   #
-# | | | | | | (_| | | | | |                                                   #
-# |_| |_| |_|\__,_|_|_| |_|                                                   #
-#                                                                             #
-###############################################################################
 def parse_args(args):
     from optparse import OptionParser
 
@@ -69,45 +38,16 @@ def parse_args(args):
     return (opt_arg[0], opt_arg[1], program_name)
 
 
-def notify(msg, level='INFO', p=True, l=True):
-    level = level.upper()
-    if p:
-        print '%s: %s' % (level, msg)
-    if l:
-        if level == 'ERROR':
-            logging.error(msg)
-        elif level == 'WARN':
-            logging.warn(msg)
-        else:
-            logging.info(msg)
-
 def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
 
     (opts, args, program_name) = parse_args(argv)
 
-    if opts.log_level == '':
-        opts.log_level = 'INFO'
-    numeric_level = getattr(logging, opts.log_level.upper(), None)
-    if not isinstance(numeric_level, int):
-        print 'ERROR: Invalid log level %s' % opts.log_level
-
     # set up logging
-    '''
-    logging.basicConfig(filename='/tmp/%s.log' % program_name,
-        format='%(asctime)s %(levelname)s %(message)s',
-        filemode='a',
-        level=numeric_level)
-    '''
-    logger = logging.getLogger('xxx.py')
-    fh = logging.FileHandler('/tmp/xxx.log')
-    fm = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-    fh.setFormatter(fm)
-    logger.setLevel(numeric_level)
-    logger.addHandler(fh)
+    logger = get_sys_logger('xxx.py')
+    logger.error('Testing sys_logger from xxx.py') 
 
-    instance = Any('yyy', logger)
     arg_count = 0
     for arg in args:
         notify('arg[%d]=%r' % (arg_count, arg))
